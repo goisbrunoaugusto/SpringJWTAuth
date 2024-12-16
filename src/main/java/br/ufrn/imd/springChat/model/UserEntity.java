@@ -1,5 +1,6 @@
 package br.ufrn.imd.springChat.model;
 
+import br.ufrn.imd.springChat.model.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -16,6 +17,17 @@ public class UserEntity {
     @Column(nullable = false)
     @JsonIgnore
     private String password;
+
+    @Column(nullable = false)
+    private UserRole role;
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
 
     public String getPassword() {
         return password;

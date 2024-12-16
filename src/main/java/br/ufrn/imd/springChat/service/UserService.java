@@ -4,6 +4,7 @@ import br.ufrn.imd.springChat.model.UserDetailsImpl;
 import br.ufrn.imd.springChat.model.UserEntity;
 import br.ufrn.imd.springChat.model.dto.TokenDTO;
 import br.ufrn.imd.springChat.model.dto.UserDTO;
+import br.ufrn.imd.springChat.model.enums.UserRole;
 import br.ufrn.imd.springChat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +24,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserEntity register(UserDTO userDTO) {
+    public UserEntity registerUser(UserDTO userDTO) {
         if(userRepository.findByName(userDTO.getName()).isPresent()){
             throw new RuntimeException("User already exists");
         }
@@ -33,6 +34,7 @@ public class UserService {
         UserEntity user = new UserEntity();
         user.setName(userDTO.getName());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setRole(UserRole.USER);
         return userRepository.save(user);
     }
 
@@ -48,4 +50,17 @@ public class UserService {
         }
     }
 
+    public UserEntity registerAdmin(UserDTO userDTO) {
+        if(userRepository.findByName(userDTO.getName()).isPresent()){
+            throw new RuntimeException("User already exists");
+        }
+        if (userDTO.getName() == null || userDTO.getName().isEmpty()) {
+            throw new RuntimeException("User name cannot be null or empty");
+        }
+        UserEntity user = new UserEntity();
+        user.setName(userDTO.getName());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setRole(UserRole.ADMIN);
+        return userRepository.save(user);
+    }
 }

@@ -33,7 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = recoverToken(authHeader);
 
         if (token != null) {
-            String subject = jwtService.getUsernameFromToken(token);
+            String subject = jwtService.validateToken(token);
             UserEntity user;
             try {
                 user = userRepository.findByName(subject).get();
@@ -41,7 +41,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 throw new RuntimeException("Inconsistent User");
             }
             UserDetailsImpl userDetails = new UserDetailsImpl(user);
-            Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
+            Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+                    null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
         filterChain.doFilter(request, response);

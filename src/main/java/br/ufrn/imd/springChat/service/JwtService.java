@@ -16,7 +16,7 @@ public class JwtService {
 
     private final Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
 
-    public String getUsernameFromToken(String token) {
+    public String validateToken(String token) {
         return JWT.require(algorithm)
                 .withIssuer(ISSUER)
                 .build()
@@ -32,7 +32,6 @@ public class JwtService {
                     .withIssuedAt(creationDate())
                     .withExpiresAt(expirationDate())
                     .sign(algorithm);
-            System.out.println(token);
             return token;
         } catch (Exception e){
             throw new RuntimeException("Error generating token");

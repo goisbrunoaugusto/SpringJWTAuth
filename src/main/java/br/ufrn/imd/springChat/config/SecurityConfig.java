@@ -27,7 +27,11 @@ public class SecurityConfig {
 
     private static final String[] ENDPOINTS_WITH_NO_AUTHENTICATION_REQUIRED = {
         "/user/login",
-        "/user/register"
+        "/user/register",
+        "user/registerAdmin"
+    };
+    private static final String [] ENDPOINTS_WITH_ADMIN_AUTHENTICATION_REQUIRED = {
+        "/user/admin"
     };
 
     @Bean
@@ -38,6 +42,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorize -> authorize.
                         requestMatchers(ENDPOINTS_WITH_NO_AUTHENTICATION_REQUIRED).permitAll()
+                        .requestMatchers(ENDPOINTS_WITH_ADMIN_AUTHENTICATION_REQUIRED).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

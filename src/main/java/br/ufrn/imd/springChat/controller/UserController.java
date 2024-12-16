@@ -23,7 +23,17 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
         try{
-            UserEntity user = userService.register(userDTO);
+            UserEntity user = userService.registerUser(userDTO);
+            return ResponseEntity.ok(user);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/registerAdmin")
+    public ResponseEntity<?> registerAdmin(@RequestBody UserDTO userDTO) {
+        try{
+            UserEntity user = userService.registerAdmin(userDTO);
             return ResponseEntity.ok(user);
         } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -38,6 +48,11 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<?> admin() {
+        return ResponseEntity.ok("Admin");
     }
 
 }
